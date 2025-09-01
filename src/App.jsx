@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 // components
 import CoinCard from './components/CoinCard';
+import LimitSelector from './components/LimitSelector';
 
 // env variables
 const API_URL = import.meta.env.VITE_API_URL;
@@ -16,7 +17,7 @@ const App = () => {
 		const fetchCoins = async () => {
 			try {
 				const res = await fetch(
-					`${API_URL}&order=market_cap_desc&per_page=10&page=1&spqrkline=false`
+					`${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&spqrkline=false`
 				);
 
 				if (!res.ok) throw new Error('Failed to fetch data');
@@ -32,7 +33,7 @@ const App = () => {
 		};
 
 		fetchCoins();
-	}, []);
+	}, [limit]);
 
 	return (
 		<div>
@@ -40,19 +41,10 @@ const App = () => {
 
 			{error && <div className="error"> {error} </div>}
 
-			<div className="controls">
-				<label htmlFor="limit">Show:</label>
-				<select
-					id="limit"
-					value={limit}
-					onChange={e => setLimit(Number(e.target.value))}
-				>
-					<option value="10">10</option>
-					<option value="20">20</option>
-					<option value="50">50</option>
-					<option value="100">100</option>
-				</select>
-			</div>
+			<LimitSelector
+				limit={limit}
+				setLimit={setLimit}
+			/>
 
 			{!loading && !error && (
 				<div>
