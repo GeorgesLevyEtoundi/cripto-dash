@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 // components
 import Spinner from '../components/Spinner';
+import CoinChart from '../components/CoinChart';
 
 // env variables
 const COIN_API_URL = import.meta.env.VITE_COIN_API_URL;
@@ -24,11 +25,8 @@ const CoinDetailsPage = () => {
 				const data = await res.json();
 
 				setCoin(data);
-
-				console.log('Coin data |||', data);
 			} catch (err) {
 				setError(err.message);
-				console.log('There is an error |||', err);
 			} finally {
 				setLoading(false);
 			}
@@ -118,6 +116,8 @@ const CoinDetailsPage = () => {
 							{new Date(coin.last_updated).toLocaleString()}
 						</h4>
 					</div>
+
+					<CoinChart coinId={coin.id} />
 
 					<div className="coin-details-links">
 						{coin.links.homepage[0] && (
